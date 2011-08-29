@@ -2,8 +2,41 @@ SyncMFS is GridFS based file synchronization system over cloud and remote comput
 
 It is at very very early stage and it should not be using on production environment for now.
 
+--
+
+
+USAGE
+
+After you build it you should create a .syncmfs file on your home directory or current directory you are using it.
+
+
+
+For example;
+
+mkdir folder1
+java -jar syncmfs.jar UPDATE folder1
+
+If you want to commit your changes
+
+java -jar syncmfs.jar COMMIT folder1 
+
+would be enough. 
+
+You can update your folder1 for remote changes by using UPDATE command also. And by the way you can see remote or local changes by using STATUS or RSTATUS actions.
+
+
+
+
+
+
+
 You should have sbt to build it. And it also has one-jar plugin support to build it as single jar file with all dependencies.
 
+
+Known problems:
+
+- Removed directories stays empty on some update cases
+- No chunk based updates or something like rsync does, it just uploads or downloads whole files
 
 
 Planning additions:
