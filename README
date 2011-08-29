@@ -1,0 +1,15 @@
+SyncMFS is GridFS based file synchronization system over cloud and remote computers.
+
+It is at very very early stage and it should not be using on production environment for now.
+
+You should have sbt to build it. And it also has one-jar plugin support to build it as single jar file with all dependencies.
+
+
+
+Planning additions:
+
+- File versioning
+- Watch-dog mode to real-time synchronize with local changes and timed checks and synchronization with remote
+- Mac-OSX, Linux and Windows UI's
+
+

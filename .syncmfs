@@ -1,0 +1,6 @@
+host = testhost.test.test
+db = syncmfs
+user = admin
+pass = secretPass
+dir = /folder1
+logging = DEBUG
