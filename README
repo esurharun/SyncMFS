@@ -14,11 +14,11 @@ Then you are free to commit or update or synch your directory tree
 For example;
 
 mkdir folder1
-java -jar syncmfs.jar UPDATE folder1
+java -jar syncmfs.jar -s <path_to_.syncmfs_file> UPDATE
 
 If you want to commit your changes
 
-java -jar syncmfs.jar COMMIT folder1 
+java -jar syncmfs.jar -s <path_to_.syncmfs_file> COMMIT  
 
 would be enough. 
 
