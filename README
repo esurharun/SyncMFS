@@ -25,11 +25,6 @@ would be enough.
 You can update your folder1 for remote changes by using UPDATE command also. And by the way you can see remote or local changes by using STATUS or RSTATUS actions.
 
 
-
-
-
-
-
 You should have sbt to build it. And it also has one-jar plugin support to build it as single jar file with all dependencies.
 
 
