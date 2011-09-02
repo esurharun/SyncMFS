@@ -120,6 +120,9 @@ package com.synchmfs {
 
 		def getMd5OnRemote(fileName: String): String = {
 
+
+			log.trace("getMd5OnRemote: %s",utility.shortenFilenameFromBeginning(fileName))
+
 			val gridFs = new GridFS(remoteDb, Settings.bucket)
 
 			val fileOnRemote = gridFs.findOne( fileName )
@@ -134,13 +137,19 @@ package com.synchmfs {
 		def getMd5OnLocal(fileName: String): String  = {
 			
 
+			log.trace("getMd5OnLocal: %s",utility.shortenFilenameFromBeginning(fileName))
+
 			val rFileName = new File(utility.convertToRealPaths(rootDir,fileName)(1))
 
 			return utility.getMD5(rFileName)
 
 		}
 
-		def getMd5OnTreeDb(fileName: String): String = treeDb.md5For(fileName);
+		def getMd5OnTreeDb(fileName: String): String = {
+
+			log.trace("getMd5OnTreeDb: %s",utility.shortenFilenameFromBeginning(fileName))
+			treeDb.md5For(fileName);	
+		} 
 
 
 
@@ -156,6 +165,8 @@ package com.synchmfs {
 				
 				var opCode = lSynchItem(0).toInt
 				var fileName = lSynchItem(1)
+
+				log.trace("Checking file %s",utility.shortenFilenameFromBeginning(fileName))
 
 				if (opCode == localSynchList.OPERATION_UPDATE) {
 

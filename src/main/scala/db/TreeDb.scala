@@ -3,16 +3,19 @@ package com.synchmfs {
 	import java.sql._
 	import java.io.File
 
-	class TreeDb(rootDir: String) {
+        import com.codahale.logula.Logging
+        import org.apache.log4j.Level
+
+	class TreeDb(rootDir: String) extends Logging {
 
 		/*
 			SQL CONSTANTS
 		*/
 		val SQL_CREATE_TREE_TABLE = "CREATE TABLE TREE (FILENAME TEXT PRIMARY KEY, MD5 TEXT) "
-		val SQL_FILENAME_COUNT = "SELECT COUNT(*) AS C FROM TREE WHERE FILENAME = '%s'"
-		val SQL_GET_MD5 = "SELECT MD5 FROM TREE WHERE FILENAME = '%s'"
-		val SQL_INSERT_FILE_ENTITY = "INSERT INTO TREE (FILENAME,MD5) VALUES('%s','%s')"
-		val SQL_DELETE_FILE_ENTITY = "DELETE FROM TREE WHERE FILENAME = '%s'"
+		val SQL_FILENAME_COUNT = "SELECT COUNT(*) AS C FROM TREE WHERE FILENAME = ?"
+		val SQL_GET_MD5 = "SELECT MD5 FROM TREE WHERE FILENAME = ?"
+		val SQL_INSERT_FILE_ENTITY = "INSERT INTO TREE (FILENAME,MD5) VALUES(?,?)"
+		val SQL_DELETE_FILE_ENTITY = "DELETE FROM TREE WHERE FILENAME = ?"
 		val SQL_GET_NEXT = "SELECT * FROM TREE LIMIT 1 OFFSET %d"
 
 
@@ -50,7 +53,12 @@ package com.synchmfs {
 
         if (create_db)
         {
-        	statement.executeUpdate(SQL_CREATE_TREE_TABLE)
+
+                val sql = SQL_CREATE_TREE_TABLE
+
+                log.trace("SQL: %s",sql)
+
+        	statement.executeUpdate(sql)
         }
 
         def resetOffset {
@@ -60,7 +68,13 @@ package com.synchmfs {
        
 
         def getNext: scala.Array[String] = {
-        	val rs = statement.executeQuery(SQL_GET_NEXT format offset)
+
+                val sql = SQL_GET_NEXT format offset
+
+                //log.trace("SQL: %s",sql)
+
+
+        	val rs = statement.executeQuery(sql)
 
         	if (!rs.next)
         		return null
@@ -78,7 +92,14 @@ package com.synchmfs {
 
         def isFileExists(fileName: String): Boolean = {
         	
-        	val rs = statement.executeQuery(SQL_FILENAME_COUNT format fileName)
+                val pStat = conn.prepareStatement(SQL_FILENAME_COUNT)
+                pStat.setString(1,fileName)
+
+                // val sql = SQL_FILENAME_COUNT format fileName
+
+                // log.trace("SQL: %s",sql)
+
+        	val rs = pStat.executeQuery
 
         	var ret = false;
         	while (rs.next) {
@@ -86,21 +107,51 @@ package com.synchmfs {
         	}
 
         	rs.close()
+                pStat.close()
 
         	return ret;
         }
 
         def addFile(fileName:String, md5: String) {
-        	statement.executeUpdate(SQL_INSERT_FILE_ENTITY format (fileName, md5))
+
+                 val pStat = conn.prepareStatement(SQL_INSERT_FILE_ENTITY)
+
+
+                pStat.setString(1,fileName)
+                pStat.setString(2,md5)
+                pStat.executeUpdate
+
         }
 
         def removeFile(fileName:String) {
-        	statement.executeUpdate(SQL_DELETE_FILE_ENTITY format fileName)
+
+         //        val sql = SQL_DELETE_FILE_ENTITY format fileName
+
+         //        log.trace("SQL: %s",sql)
+
+        	// statement.executeUpdate(sql)
+
+                val pStat = conn.prepareStatement(SQL_DELETE_FILE_ENTITY)
+
+
+                pStat.setString(1,fileName)
+                pStat.executeUpdate
         }
 
         def md5For(fileName:String): String = {
 
-			val rs = statement.executeQuery(SQL_GET_MD5 format fileName)
+
+                // val sql = SQL_GET_MD5 format fileName
+
+                // log.trace("SQL: %s",sql)
+
+                val pStat = conn.prepareStatement(SQL_GET_MD5)
+
+
+                pStat.setString(1,fileName)
+                
+
+		val rs = pStat.executeQuery
 
         	var ret: String = null;
         	while (rs.next) {
@@ -108,6 +159,7 @@ package com.synchmfs {
         	}
 
         	rs.close()
+                pStat.close()
 
         	return ret;
         }

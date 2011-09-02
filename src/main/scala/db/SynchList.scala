@@ -15,9 +15,9 @@ package com.synchmfs {
 		SQL CONSTANTS
 	*/
 	val SQL_CREATE_LIST_TABLE = "CREATE TABLE LIST (OPERATION INTEGER, FILENAME TEXT) "
-	val SQL_INSERT_ITEM = "INSERT INTO LIST (OPERATION,FILENAME) VALUES('%d','%s')"		
+	val SQL_INSERT_ITEM = "INSERT INTO LIST (OPERATION,FILENAME) VALUES(?,?)"		
 	val SQL_GET_NEXT = "SELECT * FROM LIST LIMIT 1 OFFSET %d"
-        val SQL_SELECT_BY_FILENAME = "SELECT * FROM LIST WHERE FILENAME = '%s'"
+        val SQL_SELECT_BY_FILENAME = "SELECT * FROM LIST WHERE FILENAME = ?"
 
 	
 
@@ -37,7 +37,12 @@ package com.synchmfs {
       	}
 
         def getOperationForFile(fileName:String): Int = {
-                val rs = statement.executeQuery(SQL_SELECT_BY_FILENAME format fileName)
+
+                val pStat = conn.prepareStatement(SQL_SELECT_BY_FILENAME)
+                pStat.setString(1,fileName)
+
+                //val rs = statement.executeQuery(SQL_SELECT_BY_FILENAME format fileName)
+                val rs = pStat.executeQuery
 
                 if (!rs.next)
                         return -1
@@ -46,12 +51,19 @@ package com.synchmfs {
 
 
                 rs.close()
+                pStat.close()
 
                 return ret;
         }
 
         def addItem(operation:Int,fileName:String) {
-        	statement.executeUpdate(SQL_INSERT_ITEM format (operation, fileName))
+                val pStat = conn.prepareStatement(SQL_INSERT_ITEM)
+                pStat.setInt(1,operation)
+                pStat.setString(2,fileName)
+
+        	//statement.executeUpdate(SQL_INSERT_ITEM format (operation, fileName))
+                pStat.executeUpdate
+                pStat.close
         }
 
         def getNext: scala.Array[String] = {

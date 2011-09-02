@@ -14,7 +14,7 @@ package com.synchmfs {
 			
 			treeDb.resetOffset
 			
-			log.debug("Updating directory synch. list for %s",rootDir.getAbsolutePath)
+			log.debug("Updating directory synch. list for %s",utility.shortenFilenameFromBeginning(rootDir.getAbsolutePath))
 
 
 			val parentPath = utility.getParentPaths(rootDir)
@@ -36,14 +36,14 @@ package com.synchmfs {
 
 						val remoteFilePath = utility.getPathRelativetoParentPaths(file, parentPath )
 
-						log.trace("%s checking for tree db",remoteFilePath)
+						log.trace("%s checking for tree db",utility.shortenFilenameFromBeginning(remoteFilePath))
 
 						if (!treeDb.isFileExists(remoteFilePath))
 						{
 							
 							if (remoteFilePath != ".syncmfs.db/syncmfs.tree") {
 
-								log.debug("%s -> ADD for local synch. list",remoteFilePath)
+								log.debug("%s -> ADD for local synch. list",utility.shortenFilenameFromBeginning(remoteFilePath))
 
 								synchList.addItem(synchList.OPERATION_ADD,remoteFilePath)
 							}

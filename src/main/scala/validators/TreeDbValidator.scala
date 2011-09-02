@@ -13,7 +13,7 @@ package com.synchmfs {
 			
 			treeDb.resetOffset
 
-			log.debug("Updating tree db synch. list for %s",rootDir.getAbsolutePath)
+			log.debug("Updating tree db synch. list for %s",utility.shortenFilenameFromBeginning(rootDir.getAbsolutePath))
 
 			var next = treeDb.getNext
 
@@ -26,7 +26,7 @@ package com.synchmfs {
 
 				val file = new File(filePath)
 
-				log.trace("%s checking for local",remoteFilename)
+				log.trace("%s checking for local",utility.shortenFilenameFromBeginning(remoteFilename))
 				if (file.exists) {
 					
 					//If the file described on .syncmfs.tree is exists but not has same MD5 on current tree, it is marked as UPDATE on synch list
@@ -36,7 +36,7 @@ package com.synchmfs {
 					if (actualMd5 != lastMd5)
 					{
 
-						log.debug("%s -> UPDATE for local synch list",remoteFilename)
+						log.debug("%s -> UPDATE for local synch list",utility.shortenFilenameFromBeginning(remoteFilename))
 						synchList.addItem(synchList.OPERATION_UPDATE,remoteFilename)
 					}
 
@@ -45,7 +45,7 @@ package com.synchmfs {
 
 				} else {
 					//If the file described on syncmfs.tree is not exists on current directory tree, it is marked as DELETE on synch list
-					log.debug("%s -> DELETE for local synch list",remoteFilename)
+					log.debug("%s -> DELETE for local synch list",utility.shortenFilenameFromBeginning(remoteFilename))
 					synchList.addItem(synchList.OPERATION_DELETE,remoteFilename)
 				}
 

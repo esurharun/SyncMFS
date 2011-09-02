@@ -8,6 +8,16 @@ package com.synchmfs {
 	object Utility {
 		
 
+		def shortenFilenameFromBeginning(fName:String): String = {
+			
+			if (fName.length <= 40)
+				return fName
+			else
+				return "..."+fName.substring(fName.length-37,fName.length)
+
+
+		}
+
 		/*
 			Returns parent path tree 
 		*/

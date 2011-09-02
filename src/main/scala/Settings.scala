@@ -2,8 +2,14 @@ package com.synchmfs {
 
 
 	import com.codahale.logula.Logging
-	import org.apache.log4j.Level
+	import org.apache.log4j._
+	import org.apache.log4j.spi._
 	
+	class RichEnumeration[T](enumeration:java.util.Enumeration[T]) extends Iterator[T] {
+ 			def hasNext:Boolean =  enumeration.hasMoreElements()
+  			def next:T = enumeration.nextElement()
+	}
+
 	object Settings  extends Logging  {
 		
 		import java.io.File
@@ -37,6 +43,10 @@ package com.synchmfs {
 
 		import scala.util.control.Breaks._	
 
+
+		
+
+		
 
 		def processSettingsFile {
 
@@ -180,6 +190,27 @@ package com.synchmfs {
 				}
 
 			 }
+
+
+			 // Updating logula appenders format layout to our own
+			 val appenderEnum: java.util.Enumeration[Appender] = Logger.getRootLogger().getAllAppenders().asInstanceOf[java.util.Enumeration[Appender]]
+
+			 new RichEnumeration[Appender](appenderEnum).foreach(appender => {
+			 	appender match {
+
+			 		case attachable: AppenderAttachable =>  { 
+
+			 			val attachableAppenderEnum: java.util.Enumeration[Appender] = attachable.getAllAppenders().asInstanceOf[java.util.Enumeration[Appender]]
+
+			 			new RichEnumeration[Appender](attachableAppenderEnum).foreach(nappender => {
+			 				
+			 				nappender.setLayout(new SyncmfsLogFormatter)
+			 			})
+				 	}
+				 	
+			 	
+			 	}
+			 })
 
 
 			log.info("Using settings file at %s",settingsFileLocation)
