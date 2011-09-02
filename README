@@ -14,20 +14,15 @@ Then you are free to commit or update or synch your directory tree
 For example;
 
 mkdir folder1
-java -jar syncmfs.jar UPDATE folder1
+java -jar syncmfs.jar -s <path_to_.syncmfs_file> UPDATE
 
 If you want to commit your changes
 
-java -jar syncmfs.jar COMMIT folder1 
+java -jar syncmfs.jar -s <path_to_.syncmfs_file> COMMIT  
 
 would be enough. 
 
 You can update your folder1 for remote changes by using UPDATE command also. And by the way you can see remote or local changes by using STATUS or RSTATUS actions.
-
-
-
-
-
 
 
 You should have sbt to build it. And it also has one-jar plugin support to build it as single jar file with all dependencies.
@@ -45,5 +40,5 @@ Planning additions:
 - Watch-dog mode to real-time synchronize with local changes and timed checks and synchronization with remote
 - Mac-OSX, Linux and Windows UI's
 
-For more information please contact to esur[dot]harun[at]GMAIL[dot]COM
+For more information please contact to Harun ESUR at esur[dot]harun[at]GMAIL[dot]COM
 
