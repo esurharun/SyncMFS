@@ -1,4 +1,4 @@
-SyncMFS is GridFS based file synchronization system over cloud and remote computers.
+SyncMFS is GridFS based file synchronization system like Dropbox over cloud and remote computers.
 
 It is at very very early stage and it should not be using on production environment for now.
 
